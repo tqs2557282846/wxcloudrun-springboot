@@ -5,13 +5,15 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_ADDRESS}/${MYSQL_DATABASE:springboot_demo}
-    username: ${MYSQL_USERNAME}
-    password: ${MySQL_PASSWORD}
+    url: jdbc:mysql://sh-cynosdbmysql-grp-ex8bucey.sql.tencentcdb.com:21658/springboot_demo?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+
+    #10.7.104.133:3306/springboot_demo?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: Tqs2557282846
   mvc:
     view:
       suffix: .html
       prefix: /
 
 mybatis:
-  mapper-locations: classpath*:mapper/*Mapper.xml
+  mapper-locations: classpath*:mapper/*Mapper.xml,classpath*:mapper/*Dao.xml

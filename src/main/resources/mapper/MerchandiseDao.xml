@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.wxcloudrun.dao.MerchandiseDao">
+
+    <resultMap type="com.tencent.wxcloudrun.model.Merchandise" id="MerchandiseMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="pictures" column="pictures" jdbcType="VARCHAR"/>
+        <result property="openpid" column="openpid" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="MerchandiseMap">
+        select
+          id, name, pictures, openpid, status
+        from merchandise
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="MerchandiseMap">
+        select
+          id, name, pictures, openpid, status
+        from merchandise
+        <where>
+            <if test="merchandise.id != null">
+                and id = #{merchandise.id}
+            </if>
+            <if test="merchandise.name != null and merchandise.name != ''">
+                and name like %#{merchandise.name}%
+            </if>
+            <if test="merchandise.pictures != null and merchandise.pictures != ''">
+                and pictures = #{merchandise.pictures}
+            </if>
+            <if test="merchandise.openpid != null and merchandise.openpid != ''">
+                and openpid = #{merchandise.openpid}
+            </if>
+            <if test="merchandise.status != null">
+                and status = #{merchandise.status}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from merchandise
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="pictures != null and pictures != ''">
+                and pictures = #{pictures}
+            </if>
+            <if test="openpid != null and openpid != ''">
+                and openpid = #{openpid}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into merchandise(name, pictures, openpid, status)
+        values (#{name}, #{pictures}, #{openpid}, #{status})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into merchandise(name, pictures, openpid, status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.name}, #{entity.pictures}, #{entity.openpid}, #{entity.status})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into merchandise(name, pictures, openpid, status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.pictures}, #{entity.openpid}, #{entity.status})
+        </foreach>
+        on duplicate key update
+        name = values(name),
+        pictures = values(pictures),
+        openpid = values(openpid),
+        status = values(status)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update merchandise
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="pictures != null and pictures != ''">
+                pictures = #{pictures},
+            </if>
+            <if test="openpid != null and openpid != ''">
+                openpid = #{openpid},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from merchandise where id = #{id}
+    </delete>
+
+</mapper>
+

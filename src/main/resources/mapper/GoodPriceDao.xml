@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.wxcloudrun.dao.GoodPriceDao">
+
+    <resultMap type="com.tencent.wxcloudrun.model.GoodPrice" id="GoodPriceMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="goodId" column="good_id" jdbcType="INTEGER"/>
+        <result property="price" column="price" jdbcType="VARCHAR"/>
+        <result property="openpid" column="openpid" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="GoodPriceMap">
+        select
+          id, good_id, price, openpid
+        from good_price
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="GoodPriceMap">
+        select
+          id, good_id, price, openpid
+        from good_price
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="goodId != null">
+                and good_id = #{goodId}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="openpid != null and openpid != ''">
+                and openpid = #{openpid}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from good_price
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="goodId != null">
+                and good_id = #{goodId}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="openpid != null and openpid != ''">
+                and openpid = #{openpid}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into good_price(good_id, price, openpid)
+        values (#{goodId}, #{price}, #{openpid})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into good_price(good_id, price, openpid)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.goodId}, #{entity.price}, #{entity.openpid})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into good_price(good_id, price, openpid)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.goodId}, #{entity.price}, #{entity.openpid})
+        </foreach>
+        on duplicate key update
+        good_id = values(good_id),
+        price = values(price),
+        openpid = values(openpid)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update good_price
+        <set>
+            <if test="goodId != null">
+                good_id = #{goodId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="openpid != null and openpid != ''">
+                openpid = #{openpid},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from good_price where id = #{id}
+    </delete>
+
+</mapper>
+

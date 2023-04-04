@@ -13,7 +13,7 @@
     <!--查询单个-->
     <select id="queryById" resultMap="MerchandiseMap">
         select
-          id, name, pictures, openpid, status
+          id,name,pictures,openpid,status
         from merchandise
         where id = #{id}
     </select>
@@ -21,14 +21,14 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="MerchandiseMap">
         select
-          id, name, pictures, openpid, status
+          id,name,pictures,openpid,status
         from merchandise
         <where>
             <if test="merchandise.id != null">
                 and id = #{merchandise.id}
             </if>
             <if test="merchandise.name != null and merchandise.name != ''">
-                and name like %#{merchandise.name}%
+                and name like concat('%',#{merchandise.name},'%')
             </if>
             <if test="merchandise.pictures != null and merchandise.pictures != ''">
                 and pictures = #{merchandise.pictures}

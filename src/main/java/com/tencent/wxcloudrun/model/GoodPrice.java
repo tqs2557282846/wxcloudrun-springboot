@@ -1,7 +1,11 @@
 package com.tencent.wxcloudrun.model;
 
+import lombok.Data;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
+
 import java.math.BigDecimal;
 import java.io.Serializable;
+import java.sql.Date;
 
 /**
  * 商品竞价表(GoodPrice)实体类
@@ -9,6 +13,7 @@ import java.io.Serializable;
  * @author tanqiusheng
  * @since 2023-03-29 10:34:33
  */
+@Data
 public class GoodPrice implements Serializable {
     private static final long serialVersionUID = 518140833312678939L;
     /**
@@ -29,37 +34,9 @@ public class GoodPrice implements Serializable {
     private String openpid;
 
 
-    public Long getId() {
-        return id;
-    }
+    private DateTimeLiteralExpression.DateTime CreateTime;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getGoodId() {
-        return goodId;
-    }
-
-    public void setGoodId(Long goodId) {
-        this.goodId = goodId;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getOpenpid() {
-        return openpid;
-    }
-
-    public void setOpenpid(String openpid) {
-        this.openpid = openpid;
-    }
+    private DateTimeLiteralExpression.DateTime UpdateTime;
 
 }
 

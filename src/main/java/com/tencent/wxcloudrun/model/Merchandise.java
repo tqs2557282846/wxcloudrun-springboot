@@ -1,5 +1,8 @@
 package com.tencent.wxcloudrun.model;
 
+import lombok.Data;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +11,7 @@ import java.io.Serializable;
  * @author tanqiusheng
  * @since 2023-03-29 13:49:50
  */
+@Data
 public class Merchandise implements Serializable {
     private static final long serialVersionUID = -93597377850293911L;
     /**
@@ -31,46 +35,11 @@ public class Merchandise implements Serializable {
      */
     private Integer status;
 
+    private String factory;
 
-    public Long getId() {
-        return id;
-    }
+    private DateTimeLiteralExpression.DateTime CreateTime;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(String pictures) {
-        this.pictures = pictures;
-    }
-
-    public String getOpenpid() {
-        return openpid;
-    }
-
-    public void setOpenpid(String openpid) {
-        this.openpid = openpid;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+    private DateTimeLiteralExpression.DateTime UpdateTime;
 
 
 }

@@ -2,6 +2,7 @@ package com.tencent.wxcloudrun.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.tencent.wxcloudrun.Util.HelpUtil;
 import com.tencent.wxcloudrun.dao.GoodPriceDao;
 import com.tencent.wxcloudrun.dto.PageDto;
 import com.tencent.wxcloudrun.model.GoodPrice;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.io.ObjectStreamClass.lookup;
 
 /**
  * 竞价商品表(Merchandise)表控制层
@@ -38,6 +41,12 @@ public class MerchandiseController {
     private GoodPriceService goodPriceService;
     @Resource
     private GoodPriceDao goodPriceDao;
+
+    HelpUtil helpUtil = new HelpUtil();
+    @GetMapping("/test")
+    public String test(){
+        return "成功";
+    }
 
     /**
      * 分页查询
@@ -90,6 +99,7 @@ public class MerchandiseController {
      */
     @PostMapping("/add")
     public ResponseEntity<Merchandise> add(Merchandise merchandise) {
+        merchandise.setOpenpid(helpUtil.getOpenPid(merchandise.getOpenpid()));
         return ResponseEntity.ok(this.merchandiseService.insert(merchandise));
     }
 

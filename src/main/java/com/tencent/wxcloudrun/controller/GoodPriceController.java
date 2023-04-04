@@ -2,6 +2,7 @@ package com.tencent.wxcloudrun.controller;
 
 
 
+import com.tencent.wxcloudrun.Util.HelpUtil;
 import com.tencent.wxcloudrun.model.GoodPrice;
 import com.tencent.wxcloudrun.service.GoodPriceService;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,10 @@ public class GoodPriceController {
      */
     @Resource
     private GoodPriceService goodPriceService;
+
+    HelpUtil helpUtil = new HelpUtil();
+
+
 
     /**
      * 分页查询
@@ -57,6 +62,7 @@ public class GoodPriceController {
      */
     @PostMapping("/add")
     public ResponseEntity<GoodPrice> add(GoodPrice goodPrice) {
+        goodPrice.setOpenpid(helpUtil.getOpenPid(goodPrice.getOpenpid()));
         return ResponseEntity.ok(this.goodPriceService.insert(goodPrice));
     }
 

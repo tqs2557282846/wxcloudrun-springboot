@@ -42,7 +42,7 @@ public class MerchandiseController {
     @Resource
     private GoodPriceDao goodPriceDao;
 
-    HelpUtil helpUtil = new HelpUtil();
+    private HelpUtil helpUtil = new HelpUtil();
     @GetMapping("/test")
     public String test(){
         return "成功";
@@ -55,7 +55,7 @@ public class MerchandiseController {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    @GetMapping("/page")
+    @PostMapping("/page")
     //map<Merchandise,List<GoodPrice>>
     public ResponseEntity<Map<Merchandise, List<GoodPrice>>> queryByPage(
             Merchandise merchandise,

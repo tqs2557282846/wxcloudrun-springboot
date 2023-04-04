@@ -27,7 +27,7 @@ public class GoodPriceController {
     @Resource
     private GoodPriceService goodPriceService;
 
-    HelpUtil helpUtil = new HelpUtil();
+    private HelpUtil helpUtil = new HelpUtil();
 
 
 

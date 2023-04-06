@@ -1,5 +1,7 @@
 package com.tencent.wxcloudrun.model;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 
@@ -33,9 +35,9 @@ public class GoodPrice implements Serializable {
      */
     private String openpid;
 
-
+    @TableField(fill = FieldFill.INSERT)
     private DateTimeLiteralExpression.DateTime CreateTime;
-
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private DateTimeLiteralExpression.DateTime UpdateTime;
 
 }

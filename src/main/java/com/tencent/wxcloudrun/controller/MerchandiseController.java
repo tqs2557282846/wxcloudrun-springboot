@@ -3,12 +3,18 @@ package com.tencent.wxcloudrun.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.tencent.wxcloudrun.Util.HelpUtil;
+import com.tencent.wxcloudrun.Util.MapStruct;
 import com.tencent.wxcloudrun.dao.GoodPriceDao;
 import com.tencent.wxcloudrun.dto.PageDto;
+import com.tencent.wxcloudrun.dto.merchandiseDto;
+import com.tencent.wxcloudrun.imageupload.FileUploadController;
+import com.tencent.wxcloudrun.imageupload.FileUploadService;
 import com.tencent.wxcloudrun.model.GoodPrice;
 import com.tencent.wxcloudrun.model.Merchandise;
 import com.tencent.wxcloudrun.service.GoodPriceService;
 import com.tencent.wxcloudrun.service.MerchandiseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +39,7 @@ import static java.io.ObjectStreamClass.lookup;
 @RestController
 @RequestMapping("/merchandise")
 public class MerchandiseController {
+    private static final Logger logger = LoggerFactory.getLogger(MerchandiseController.class);
     /**
      * 服务对象
      */
@@ -41,6 +49,8 @@ public class MerchandiseController {
     private GoodPriceService goodPriceService;
     @Resource
     private GoodPriceDao goodPriceDao;
+    @Resource
+    private FileUploadService fileUploadService;
 
     private HelpUtil helpUtil = new HelpUtil();
     @GetMapping("/test")
@@ -52,7 +62,7 @@ public class MerchandiseController {
      * 分页查询
      *
      * @param merchandise 筛选条件
-     * @param pageRequest      分页对象
+     *
      * @return 查询结果
      */
     @PostMapping("/page")
@@ -68,7 +78,7 @@ public class MerchandiseController {
             a=Sort.Direction.DESC;
         }
 
-        PageRequest pageRequest=PageRequest.of(pageDto.getPage(),pageDto.getSize(), Sort.by(a,"status"));
+        PageRequest pageRequest=PageRequest.of(pageDto.getPage(),pageDto.getSize(), Sort.by(a,pageDto.getArrayType()));
         //Merchandise merchandise = new Merchandise();pageDto.getArrayType(),
         Map<Merchandise, List<GoodPrice>> map = new HashMap<>();
         LambdaQueryWrapper<GoodPrice> lambdaQueryWrapper;
@@ -94,11 +104,16 @@ public class MerchandiseController {
     /**
      * 新增数据
      *
-     * @param merchandise 实体
+     *
      * @return 新增结果
      */
     @PostMapping("/add")
-    public ResponseEntity<Merchandise> add(Merchandise merchandise) {
+    public ResponseEntity<Merchandise> add(merchandiseDto m,HttpServletRequest request) {
+        String path = request.getSession().getServletContext().getRealPath("merchandisePictures");
+        String imageUrl =path + fileUploadService.upload(m.getPictures(), path);
+        logger.info("文件存储路径：{}", path);
+        Merchandise merchandise = MapStruct.INSTANCES.merchandiseDtoToMerchandise(m);
+        merchandise.setPictures(imageUrl);
         merchandise.setOpenpid(helpUtil.getOpenPid(merchandise.getOpenpid()));
         return ResponseEntity.ok(this.merchandiseService.insert(merchandise));
     }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.wxcloudrun.dao.UserDao">
+
+    <resultMap type="com.tencent.wxcloudrun.model.User" id="UserMap">
+        <result property="openpid" column="openpid" jdbcType="VARCHAR"/>
+        <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select
+          openpid, createTime
+        from User
+        where openpid = #{openpid}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserMap">
+        select
+          openpid, createTime
+        from User
+        <where>
+            <if test="openpid != null and openpid != ''">
+                and openpid = #{openpid}
+            </if>
+            <if test="createtime != null">
+                and createTime = #{createtime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from User
+        <where>
+            <if test="openpid != null and openpid != ''">
+                and openpid = #{openpid}
+            </if>
+            <if test="createtime != null">
+                and createTime = #{createtime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="openpid" useGeneratedKeys="true">
+        insert into User(createTime)
+        values (#{createtime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="openpid" useGeneratedKeys="true">
+        insert into User(createTime)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.createtime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="openpid" useGeneratedKeys="true">
+        insert into User(createTime)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.createtime})
+        </foreach>
+        on duplicate key update
+        createTime = values(createTime)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update User
+        <set>
+            <if test="createtime != null">
+                createTime = #{createtime},
+            </if>
+        </set>
+        where openpid = #{openpid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from User where openpid = #{openpid}
+    </delete>
+
+</mapper>
+

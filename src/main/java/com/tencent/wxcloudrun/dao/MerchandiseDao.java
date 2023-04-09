@@ -27,7 +27,7 @@ public interface MerchandiseDao {
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<Merchandise> queryAllByLimit(Merchandise merchandise, @Param("pageable") Pageable pageable);
+    List<Merchandise> queryAllByLimit(@Param("merchandise") Merchandise merchandise, @Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数

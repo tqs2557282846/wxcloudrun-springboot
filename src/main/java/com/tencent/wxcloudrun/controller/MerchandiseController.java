@@ -71,11 +71,11 @@ public class MerchandiseController {
             Merchandise merchandise,
             @RequestBody PageDto pageDto) {
         Sort.Direction a = null;
-        if (pageDto.getArray()==0){
-            a=Sort.Direction.ASC;
-        }
         if (pageDto.getArray()==1){
             a=Sort.Direction.DESC;
+        }else a=Sort.Direction.ASC;
+        if (pageDto.getArrayType()==null){
+            pageDto.setArrayType("createTime");
         }
 
         PageRequest pageRequest=PageRequest.of(pageDto.getPage(),pageDto.getSize(), Sort.by(a,pageDto.getArrayType()));

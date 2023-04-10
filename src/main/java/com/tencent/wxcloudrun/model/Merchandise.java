@@ -6,6 +6,8 @@ import lombok.Data;
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 竞价商品表(Merchandise)实体类
@@ -40,10 +42,10 @@ public class Merchandise implements Serializable {
     private String factory;
 
     @TableField(fill = FieldFill.INSERT)
-    private DateTimeLiteralExpression.DateTime CreateTime;
+    private Timestamp CreateTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private DateTimeLiteralExpression.DateTime UpdateTime;
+    private Timestamp UpdateTime;
 
 
 }

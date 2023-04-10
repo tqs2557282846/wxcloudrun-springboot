@@ -8,6 +8,7 @@ import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 商品竞价表(GoodPrice)实体类
@@ -36,9 +37,9 @@ public class GoodPrice implements Serializable {
     private String openpid;
 
     @TableField(fill = FieldFill.INSERT)
-    private DateTimeLiteralExpression.DateTime CreateTime;
+    private Timestamp CreateTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private DateTimeLiteralExpression.DateTime UpdateTime;
+    private Timestamp UpdateTime;
 
 }
 

@@ -35,7 +35,8 @@ public interface MapStruct {
      */
 
     @Mappings({
-            @Mapping(target = "pictures",ignore = true)
+            @Mapping(target = "pictures",ignore = true),
+            @Mapping(target = "id",source = "id")
     })
     Merchandise merchandiseDtoToMerchandise(merchandiseDto merchandiseDto);
 }

@@ -2,6 +2,7 @@ package com.tencent.wxcloudrun.model;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 
@@ -21,6 +22,7 @@ public class Merchandise implements Serializable {
     /**
      * 自增唯一id
      */
+    @TableId
     private Long id;
     /**
      * 竞价商品名

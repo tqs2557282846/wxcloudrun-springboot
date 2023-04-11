@@ -1,10 +1,14 @@
 package com.tencent.wxcloudrun.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tencent.wxcloudrun.Util.HelpUtil;
 import com.tencent.wxcloudrun.Util.MapStruct;
 import com.tencent.wxcloudrun.dao.GoodPriceDao;
+import com.tencent.wxcloudrun.dao.MerchandiseDao;
 import com.tencent.wxcloudrun.dto.PageDto;
 import com.tencent.wxcloudrun.dto.merchandiseDto;
 import com.tencent.wxcloudrun.imageupload.FileUploadController;
@@ -121,12 +125,21 @@ public class MerchandiseController {
     /**
      * 编辑数据
      *
-     * @param merchandise 实体
+     *
      * @return 编辑结果
      */
     @PutMapping("/update")
-    public ResponseEntity<Merchandise> edit(Merchandise merchandise) {
-        return ResponseEntity.ok(this.merchandiseService.update(merchandise));
+    public ResponseEntity<Boolean> edit(@RequestBody merchandiseDto dto,HttpServletRequest request) {
+        Merchandise merchandise = MapStruct.INSTANCES.merchandiseDtoToMerchandise(dto);
+        if(dto.getPictures() != null){
+            String path = request.getSession().getServletContext().getRealPath("merchandisePictures");
+            String imageUrl =path + fileUploadService.upload(dto.getPictures(), path);
+            logger.info("文件存储路径：{}", path);
+            merchandise.setPictures(imageUrl);
+        }
+        UpdateWrapper<Merchandise> wrapper = new UpdateWrapper<>();
+        wrapper.eq("id",merchandise.getId());
+        return  ResponseEntity.ok(merchandiseService.update(merchandise,wrapper));
     }
 
     /**
@@ -136,8 +149,19 @@ public class MerchandiseController {
      * @return 删除是否成功
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteById(Long id) {
-        return ResponseEntity.ok(this.merchandiseService.deleteById(id));
+    public ResponseEntity<Boolean> deleteById(@RequestParam("id") Long id) {
+        boolean a = true;
+        try{
+            Merchandise merchandise = merchandiseService.queryById(id);
+            LambdaQueryWrapper<GoodPrice> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(GoodPrice::getGoodId,merchandise.getId());
+            this.goodPriceDao.delete(lambdaQueryWrapper);
+            this.merchandiseService.removeById(id);
+        }catch (Exception e){
+            a= false;
+            logger.error(e.getMessage());
+        }
+        return ResponseEntity.ok(a);
     }
 
 }

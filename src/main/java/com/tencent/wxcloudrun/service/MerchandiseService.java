@@ -1,4 +1,5 @@
 package com.tencent.wxcloudrun.service;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tencent.wxcloudrun.model.Merchandise;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
  * @author tanqiusheng
  * @since 2023-03-29 13:49:50
  */
-public interface MerchandiseService {
+public interface MerchandiseService extends IService<Merchandise> {
 
     /**
      * 通过ID查询单条数据
@@ -42,7 +43,7 @@ public interface MerchandiseService {
      * @param merchandise 实例对象
      * @return 实例对象
      */
-    Merchandise update(Merchandise merchandise);
+    Merchandise update2(Merchandise merchandise);
 
     /**
      * 通过主键删除数据
@@ -50,6 +51,6 @@ public interface MerchandiseService {
      * @param id 主键
      * @return 是否成功
      */
-    boolean deleteById(Long id);
+    boolean deleteById2(Long id);
 
 }

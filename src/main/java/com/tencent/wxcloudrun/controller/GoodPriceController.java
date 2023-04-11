@@ -2,15 +2,19 @@ package com.tencent.wxcloudrun.controller;
 
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.tencent.wxcloudrun.Util.HelpUtil;
 import com.tencent.wxcloudrun.model.GoodPrice;
 import com.tencent.wxcloudrun.service.GoodPriceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 /**
  * 商品竞价表(GoodPrice)表控制层
@@ -21,6 +25,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/goodPrice")
 public class GoodPriceController {
+    private static final Logger logger = LoggerFactory.getLogger(GoodPriceController.class);
     /**
      * 服务对象
      */
@@ -61,7 +66,7 @@ public class GoodPriceController {
      * @return 新增结果
      */
     @PostMapping("/add")
-    public ResponseEntity<GoodPrice> add(GoodPrice goodPrice) {
+    public ResponseEntity<GoodPrice> add(@RequestBody GoodPrice goodPrice) {
         goodPrice.setOpenpid(helpUtil.getOpenPid(goodPrice.getOpenpid()));
         return ResponseEntity.ok(this.goodPriceService.insert(goodPrice));
     }
@@ -69,12 +74,27 @@ public class GoodPriceController {
     /**
      * 编辑数据
      *
-     * @param goodPrice 实体
+     *
      * @return 编辑结果
      */
     @PutMapping("/update")
-    public ResponseEntity<GoodPrice> edit(GoodPrice goodPrice) {
-        return ResponseEntity.ok(this.goodPriceService.update(goodPrice));
+    public ResponseEntity<Boolean> edit(
+            @RequestBody GoodPrice goodPrice
+            //@RequestParam("id") Long id, @RequestParam("price") BigDecimal price
+    ) {
+        /*
+        GoodPrice goodPrice = new GoodPrice();
+        goodPrice.setId(id);
+        goodPrice.setPrice(price);
+
+         */
+        boolean a = false;
+        try{
+            a = this.goodPriceService.updateById(goodPrice);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+        return ResponseEntity.ok(a);
     }
 
     /**
@@ -84,8 +104,14 @@ public class GoodPriceController {
      * @return 删除是否成功
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteById(Long id) {
-        return ResponseEntity.ok(this.goodPriceService.deleteById(id));
+    public ResponseEntity<Boolean> deleteById(@RequestParam("id") Long id) {
+        boolean a = false;
+        try{
+            a = this.goodPriceService.deleteById(id);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+        return ResponseEntity.ok(a);
     }
 
 }

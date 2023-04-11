@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tencent.wxcloudrun.dao.MerchandiseDao;
 import com.tencent.wxcloudrun.model.Merchandise;
 import com.tencent.wxcloudrun.service.MerchandiseService;
@@ -17,7 +18,7 @@ import javax.annotation.Resource;
  * @since 2023-03-29 13:49:50
  */
 @Service("merchandiseService")
-public class MerchandiseServiceImpl implements MerchandiseService {
+public class MerchandiseServiceImpl extends ServiceImpl<MerchandiseDao,Merchandise> implements MerchandiseService {
     @Resource
     private MerchandiseDao merchandiseDao;
 
@@ -64,8 +65,8 @@ public class MerchandiseServiceImpl implements MerchandiseService {
      * @return 实例对象
      */
     @Override
-    public Merchandise update(Merchandise merchandise) {
-        this.merchandiseDao.update(merchandise);
+    public Merchandise update2(Merchandise merchandise) {
+        this.merchandiseDao.update2(merchandise);
         return this.queryById(merchandise.getId());
     }
 
@@ -76,7 +77,7 @@ public class MerchandiseServiceImpl implements MerchandiseService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Long id) {
-        return this.merchandiseDao.deleteById(id) > 0;
+    public boolean deleteById2(Long id) {
+        return this.merchandiseDao.deleteById2(id) > 0;
     }
 }

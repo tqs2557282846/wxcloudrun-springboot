@@ -21,11 +21,11 @@
           openpid, createTime
         from User
         <where>
-            <if test="openpid != null and openpid != ''">
-                and openpid = #{openpid}
+            <if test="user.openpid != null and user.openpid != ''">
+                and openpid = #{user.openpid}
             </if>
-            <if test="createtime != null">
-                and createTime = #{createtime}
+            <if test="user.createtime != null">
+                and createTime = #{user.createtime}
             </if>
         </where>
         limit #{pageable.offset}, #{pageable.pageSize}

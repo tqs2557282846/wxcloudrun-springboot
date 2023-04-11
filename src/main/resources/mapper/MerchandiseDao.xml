@@ -13,7 +13,7 @@
     <!--查询单个-->
     <select id="queryById" resultMap="MerchandiseMap">
         select
-          id,name,pictures,openpid,status
+          id,name,pictures,openpid,status,factory,create_time,update_time
         from merchandise
         where id = #{id}
     </select>
@@ -21,7 +21,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="MerchandiseMap">
         select
-          id,name,pictures,openpid,status
+          id,name,pictures,openpid,status,factory,create_time,update_time
         from merchandise
         <where>
             <if test="merchandise.id != null">
@@ -38,6 +38,15 @@
             </if>
             <if test="merchandise.status != null">
                 and status = #{merchandise.status}
+            </if>
+            <if test="merchandise.factory != null">
+                and factory = #{merchandise.factory}
+            </if>
+            <if test="merchandise.CreateTime != null">
+                and create_time = #{merchandise.CreateTime}
+            </if>
+            <if test="merchandise.UpdateTime != null">
+                and update_time = #{merchandise.UpdateTime}
             </if>
         </where>
         limit #{pageable.offset}, #{pageable.pageSize}
@@ -94,7 +103,7 @@
     </insert>
 
     <!--通过主键修改数据-->
-    <update id="update">
+    <update id="update2">
         update merchandise
         <set>
             <if test="name != null and name != ''">
@@ -109,12 +118,15 @@
             <if test="status != null">
                 status = #{status},
             </if>
+            <if test="factory != null">
+                and factory = #{factory}
+            </if>
         </set>
         where id = #{id}
     </update>
 
     <!--通过主键删除-->
-    <delete id="deleteById">
+    <delete id="deleteById2">
         delete from merchandise where id = #{id}
     </delete>
 

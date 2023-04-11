@@ -1,4 +1,5 @@
 package com.tencent.wxcloudrun.dao;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tencent.wxcloudrun.model.Merchandise;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author tanqiusheng
  * @since 2023-03-29 13:49:48
  */
-public interface MerchandiseDao {
+public interface MerchandiseDao extends BaseMapper<Merchandise> {
 
     /**
      * 通过ID查询单条数据
@@ -68,7 +69,7 @@ public interface MerchandiseDao {
      * @param merchandise 实例对象
      * @return 影响行数
      */
-    int update(Merchandise merchandise);
+    int update2(Merchandise merchandise);
 
     /**
      * 通过主键删除数据
@@ -76,7 +77,7 @@ public interface MerchandiseDao {
      * @param id 主键
      * @return 影响行数
      */
-    int deleteById(Long id);
+    int deleteById2(Long id);
 
 }
 

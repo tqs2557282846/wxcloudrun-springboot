@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tencent.wxcloudrun.Util.HelpUtil;
 import com.tencent.wxcloudrun.Util.MapStruct;
 import com.tencent.wxcloudrun.dao.GoodPriceDao;
@@ -101,8 +102,12 @@ public class MerchandiseController {
      * @return 单条数据
      */
     @GetMapping("/get/{id}")
-    public ResponseEntity<Merchandise> queryById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(this.merchandiseService.queryById(id));
+    public ResponseEntity<Map<Merchandise,List<GoodPrice>>> queryById(@PathVariable("id") Long id) {
+        Map<Merchandise,List<GoodPrice>> map = new HashMap<>();
+        Merchandise merchandise = merchandiseService.queryById(id);
+        List<GoodPrice> goodPrices = goodPriceDao.selectList(Wrappers.<GoodPrice>lambdaQuery().eq(GoodPrice::getGoodId,id));
+        map.put(merchandise,goodPrices);
+        return ResponseEntity.ok(map);
     }
 
     /**

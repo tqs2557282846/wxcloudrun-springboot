@@ -1,7 +1,9 @@
 package com.tencent.wxcloudrun.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tencent.wxcloudrun.Util.HelpUtil;
+import com.tencent.wxcloudrun.dao.GoodPriceDao;
 import com.tencent.wxcloudrun.dao.MerchandiseDao;
 import com.tencent.wxcloudrun.dto.PageDto;
 import com.tencent.wxcloudrun.model.GoodPrice;
@@ -23,7 +25,7 @@ import java.util.Map;
 /**
  * 用户信息表(User)表控制层
  *
- * @author makejava
+ * @author 谭秋生
  * @since 2023-04-04 13:34:57
  */
 @RestController
@@ -37,6 +39,8 @@ public class UserController {
 
     @Resource
     private MerchandiseDao merchandiseDao;
+    @Resource
+    private GoodPriceDao goodPriceDao;
 
     HelpUtil helpUtil = new HelpUtil();
 
@@ -83,14 +87,33 @@ public class UserController {
     }
 
     /**
-     * 通过主键查询单条数据
+     * 通过openpid查询单条用户和他发布的商品
      *
-     * @param id 主键
+     *
      * @return 单条数据
      */
-    @GetMapping("{id}")
-    public ResponseEntity<User> queryById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(this.userService.queryById(id));
+    @GetMapping("/getGood/{openpid}")
+    public ResponseEntity<Map<User,List<Merchandise>>> queryById(@PathVariable("openpid") String openpid) {
+        Map<User,List<Merchandise>> map = new HashMap<>();
+        User user = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getOpenpid,helpUtil.getOpenPid(openpid)));
+        List<Merchandise> merchandises = merchandiseDao.selectList(Wrappers.<Merchandise>lambdaQuery().eq(Merchandise::getOpenpid,user.getOpenpid()));
+        map.put(user,merchandises);
+        return ResponseEntity.ok(map);
+    }
+
+    /**
+     * 通过openpid查询单条用户和他发布的商品
+     *
+     *
+     * @return 单条数据
+     */
+    @GetMapping("/getPrice/{openpid}")
+    public ResponseEntity<Map<User,List<GoodPrice>>> queryById2(@PathVariable("openpid") String openpid) {
+        Map<User,List<GoodPrice>> map = new HashMap<>();
+        User user = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getOpenpid,helpUtil.getOpenPid(openpid)));
+        List<GoodPrice> goodPrices = goodPriceDao.selectList(Wrappers.<GoodPrice>lambdaQuery().eq(GoodPrice::getOpenpid,user.getOpenpid()));
+        map.put(user,goodPrices);
+        return ResponseEntity.ok(map);
     }
 
     /**
@@ -100,9 +123,9 @@ public class UserController {
      * @return 新增结果
      */
     @PostMapping("/add")
-    public ResponseEntity<User> add(User user) {
+    public ResponseEntity<Boolean> add(User user) {
         user.setOpenpid(helpUtil.getOpenPid(user.getOpenpid()));
-        return ResponseEntity.ok(this.userService.insert(user));
+        return ResponseEntity.ok(this.userService.save(user));
     }
 
     /**
@@ -112,8 +135,8 @@ public class UserController {
      * @return 编辑结果
      */
     @PutMapping
-    public ResponseEntity<User> edit(User user) {
-        return ResponseEntity.ok(this.userService.update(user));
+    public ResponseEntity<Boolean> edit(User user) {
+        return ResponseEntity.ok(this.userService.updateById(user));
     }
 
     /**
@@ -124,7 +147,7 @@ public class UserController {
      */
     @DeleteMapping
     public ResponseEntity<Boolean> deleteById(String id) {
-        return ResponseEntity.ok(this.userService.deleteById(id));
+        return ResponseEntity.ok(this.userService.removeById(id));
     }
 
 }

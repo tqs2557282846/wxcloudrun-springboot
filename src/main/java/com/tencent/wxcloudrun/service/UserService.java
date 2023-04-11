@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tencent.wxcloudrun.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -7,18 +8,10 @@ import org.springframework.data.domain.PageRequest;
 /**
  * 用户信息表(User)表服务接口
  *
- * @author makejava
+ * @author 谭秋生
  * @since 2023-04-04 13:35:04
  */
-public interface UserService {
-
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param openpid 主键
-     * @return 实例对象
-     */
-    User queryById(String openpid);
+public interface UserService extends IService<User> {
 
     /**
      * 分页查询
@@ -29,28 +22,5 @@ public interface UserService {
      */
     Page<User> queryByPage(User user, PageRequest pageRequest);
 
-    /**
-     * 新增数据
-     *
-     * @param user 实例对象
-     * @return 实例对象
-     */
-    User insert(User user);
-
-    /**
-     * 修改数据
-     *
-     * @param user 实例对象
-     * @return 实例对象
-     */
-    User update(User user);
-
-    /**
-     * 通过主键删除数据
-     *
-     * @param openpid 主键
-     * @return 是否成功
-     */
-    boolean deleteById(String openpid);
 
 }

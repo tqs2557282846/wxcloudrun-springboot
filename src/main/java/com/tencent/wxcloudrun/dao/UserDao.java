@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tencent.wxcloudrun.model.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
@@ -8,10 +9,10 @@ import java.util.List;
 /**
  * 用户信息表(User)表数据库访问层
  *
- * @author makejava
+ * @author 谭秋生
  * @since 2023-04-04 13:34:57
  */
-public interface UserDao {
+public interface UserDao extends BaseMapper<User> {
 
     /**
      * 通过ID查询单条数据
@@ -19,7 +20,7 @@ public interface UserDao {
      * @param openpid 主键
      * @return 实例对象
      */
-    User queryById(String openpid);
+    User queryById2(String openpid);
 
     /**
      * 查询指定行数据
